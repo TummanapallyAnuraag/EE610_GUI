@@ -40,6 +40,12 @@
 			<button type="button" class="btn btn-default btn-md" id="logtx">
 				Log Transform
 			</button><br>
+			<div id="gamma_correct_frame">
+				<input placeholder="gamma" value="" name="gamma" class="form-control" style="width:200px;">
+				<button type="button" class="btn btn-default btn-md" id="gamma_correct">
+					Gamma Correct
+				</button>
+			</div>
 		</div>
 	</controls>
 </body>
@@ -97,6 +103,30 @@
 		window.opn = window.opn + 1;
 		$.ajax({
         	url: "scripts/logtx.py?opn="+window.opn+"&format="+window.image.format+"&filename="+filename,
+			type: "GET",
+			beforeSend: function(){$("#body-overlay").show();},
+			success: function(data){
+		    	var image_name = JSON.parse(data)['filename'];
+		    	if(image_name.length < 1){
+		    		image_name = 'images/_gui/default.jpg';
+		    		alert("There was some error while Uploading the Image !");
+		    	}
+				d = new Date();
+		    	$('#target').attr('src', image_name+'?'+d.getTime());
+				$('#target_slave').attr('href', image_name+'?'+d.getTime());
+				setInterval(function(){
+					$("#body-overlay").hide();
+				},500);
+			}
+	   });
+   });
+
+   $('#gamma_correct').on('click',function(){
+		var filename = window.opn +'.'+ window.image.format;
+		window.opn = window.opn + 1;
+		var gamma = $('#gamma_correct_frame input').val();
+		$.ajax({
+        	url: "scripts/gammacrct.py?opn="+window.opn+"&format="+window.image.format+"&filename="+filename+"&gamma="+gamma,
 			type: "GET",
 			beforeSend: function(){$("#body-overlay").show();},
 			success: function(data){
