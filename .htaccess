@@ -1,0 +1,9 @@
+#<Directory /var/www/html/gui>
+#	Options Indexes FollowSymLinks MultiViews ExecCGI
+#        AllowOverride All
+#        Order allow,deny
+#        allow from all
+#        AddHandler cgi-script .cgi .py
+#</Directory>
+AddHandler cgi-script .cgi .py
+Options ExecCGI
