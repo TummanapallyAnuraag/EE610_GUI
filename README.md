@@ -69,6 +69,10 @@ Following are the steps to be followed for using this code on a fresh machine
 
 `sudo service apache2 restart`
 
+* Check if CGI scripts are being run, a hello world program is made for this special purpose only.
+
+Check the CGI script working by going to [http://localhost/gui/scripts/hello.py](http://localhost/gui/scripts/hello.py)
+
 * Once all the above steps are done, the GUI can be seen at [http://localhost/gui](http://localhost/gui)
 
 But if you face any problems while any of the steps, you can debug them with help of next step
