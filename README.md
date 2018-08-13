@@ -88,3 +88,17 @@ Web Help: look in [StackOverflow](https://stackoverflow.com/)
 Worst case scenario: You can always drop a mail to me. You can find my details [here](https://www.ee.iitb.ac.in/~anuraagt/)
 
 * Remember: Always restart apache2 service whenever you chnage the configuration files of apache2
+
+## SOME COMMON ISSUES
+
+* If you are not able to upload images..
+
+a) Check if the folder `images` has 777 permissions. If not you can do so by using
+
+`sudo chmod -R 777 images/`
+
+The -R is used for recursion (folder within folder scenario)
+
+b) The image upload size must be more than the permissible limit.
+
+You can check and change this *permissible limit* in /etc/php/7.0/apache2/php.ini
