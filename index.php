@@ -35,9 +35,11 @@
 			<button type="button" class="btn btn-default btn-md" id="histeq">
 				Histogram Equalise
 			</button><br>
-			<button type="button" class="btn btn-default btn-md" id="histeq">
-				<a id="target_slave" href="" download>Download</a>
-			</button><br>
+			<a id="target_slave" href="images/_gui/default.jpg" download>
+				<button type="button" class="btn btn-default btn-md">
+					Download
+				</button>
+			</a><br>
 			<button type="button" class="btn btn-default btn-md" id="logtx">
 				Log Transform
 			</button><br>
@@ -62,7 +64,7 @@
 			<button type="button" class="btn btn-default btn-md" id="undo">
 				<span style="transform: rotateY(180deg);" class="glyphicon glyphicon-repeat"></span> Undo
 			</button><br>
-			<button type="button" class="btn btn-default btn-md" id="undo">
+			<button type="button" class="btn btn-default btn-md" id="reset">
 				<span class="glyphicon glyphicon-refresh"></span> Reset
 			</button><br>
 		</div>
@@ -94,6 +96,25 @@
 		}
 	});
 
+	$('#undo').on('click',function(){
+		window.opn = window.opn - 1;
+		if(window.opn < 0){
+			window.opn = 0;
+		}
+		d = new Date();
+		var image_name = 'images/_target/' + window.opn + '.' + window.image.format;
+		$('#target').attr('src', image_name+'?'+d.getTime());
+		$('#target_slave').attr('href', image_name+'?'+d.getTime());
+	});
+
+	$('#reset').on('click',function(){
+		window.opn = 0;
+		d = new Date();
+		var image_name = 'images/_target/' + window.opn + '.' + window.image.format;
+		$('#target').attr('src', image_name+'?'+d.getTime());
+		$('#target_slave').attr('href', image_name+'?'+d.getTime());
+	});
+
 	$('#histeq').on('click',function(){
 		var filename = window.opn +'.'+ window.image.format;
 		window.opn = window.opn + 1;
@@ -102,17 +123,22 @@
 			type: "GET",
 			beforeSend: function(){$("#body-overlay").show();},
 			success: function(data){
-		    	var image_name = JSON.parse(data)['filename'];
-		    	if(image_name.length < 1){
-		    		image_name = 'images/_gui/default.jpg';
-		    		alert("There was some error while Uploading the Image !");
-		    	}
-				d = new Date();
-		    	$('#target').attr('src', image_name+'?'+d.getTime());
-				$('#target_slave').attr('href', image_name+'?'+d.getTime());
-				setInterval(function(){
-					$("#body-overlay").hide();
-				},500);
+				try{
+					var image_name = JSON.parse(data)['filename'];
+			    	if(image_name.length < 1){
+			    		image_name = 'images/_gui/default.jpg';
+			    		alert("There was some error while Uploading the Image !");
+			    	}
+					d = new Date();
+			    	$('#target').attr('src', image_name+'?'+d.getTime());
+					$('#target_slave').attr('href', image_name+'?'+d.getTime());
+					setInterval(function(){
+						$("#body-overlay").hide();
+					},500);
+				}catch(error){
+					console.error(error);
+					alert('Some ERROR occured !');
+				}
 			}
 	   });
 	});
@@ -125,17 +151,22 @@
 			type: "GET",
 			beforeSend: function(){$("#body-overlay").show();},
 			success: function(data){
-		    	var image_name = JSON.parse(data)['filename'];
-		    	if(image_name.length < 1){
-		    		image_name = 'images/_gui/default.jpg';
-		    		alert("There was some error while Uploading the Image !");
-		    	}
-				d = new Date();
-		    	$('#target').attr('src', image_name+'?'+d.getTime());
-				$('#target_slave').attr('href', image_name+'?'+d.getTime());
-				setInterval(function(){
-					$("#body-overlay").hide();
-				},500);
+				try{
+					var image_name = JSON.parse(data)['filename'];
+			    	if(image_name.length < 1){
+			    		image_name = 'images/_gui/default.jpg';
+			    		alert("There was some error while Uploading the Image !");
+			    	}
+					d = new Date();
+			    	$('#target').attr('src', image_name+'?'+d.getTime());
+					$('#target_slave').attr('href', image_name+'?'+d.getTime());
+					setInterval(function(){
+						$("#body-overlay").hide();
+					},500);
+				}catch(error){
+					console.error(error);
+					alert('Some ERROR occured !');
+				}
 			}
 	   });
    });
@@ -149,17 +180,22 @@
 			type: "GET",
 			beforeSend: function(){$("#body-overlay").show();},
 			success: function(data){
-		    	var image_name = JSON.parse(data)['filename'];
-		    	if(image_name.length < 1){
-		    		image_name = 'images/_gui/default.jpg';
-		    		alert("There was some error while Uploading the Image !");
-		    	}
-				d = new Date();
-		    	$('#target').attr('src', image_name+'?'+d.getTime());
-				$('#target_slave').attr('href', image_name+'?'+d.getTime());
-				setInterval(function(){
-					$("#body-overlay").hide();
-				},500);
+				try{
+					var image_name = JSON.parse(data)['filename'];
+					if(image_name.length < 1){
+						image_name = 'images/_gui/default.jpg';
+						alert("There was some error while Uploading the Image !");
+					}
+					d = new Date();
+					$('#target').attr('src', image_name+'?'+d.getTime());
+					$('#target_slave').attr('href', image_name+'?'+d.getTime());
+					setInterval(function(){
+						$("#body-overlay").hide();
+					},500);
+				}catch(error){
+					console.error(error);
+					alert('Some ERROR occured !');
+				}
 			}
 	   });
 	});
@@ -173,19 +209,24 @@
 			contentType: false,
     	    processData:false,
 			success: function(data){
-				window.opn = 0;
-		    	var image_name = JSON.parse(data)['filename'];
-				window.image.format = JSON.parse(data)['format'];
-		    	if(image_name.length < 1){
-		    		image_name = 'images/_gui/default.jpg';
-		    		alert("There was some error while Uploading the Image !");
-		    	}
-				d = new Date();
-		    	$('#target').attr('src', image_name+'?'+d.getTime());
-				$('#target_slave').attr('href', image_name+'?'+d.getTime());
-				setInterval(function(){
-					$("#body-overlay").hide();
-				},500);
+				try{
+					window.opn = 0;
+					var image_name = JSON.parse(data)['filename'];
+					window.image.format = JSON.parse(data)['format'];
+					if(image_name.length < 1){
+						image_name = 'images/_gui/default.jpg';
+						alert("There was some error while Uploading the Image !");
+					}
+					d = new Date();
+					$('#target').attr('src', image_name+'?'+d.getTime());
+					$('#target_slave').attr('href', image_name+'?'+d.getTime());
+					setInterval(function(){
+						$("#body-overlay").hide();
+					},500);
+				}catch(error){
+					console.error(error);
+					alert('Some ERROR occured !');
+				}
 			}
 	   });
     }
