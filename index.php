@@ -2,9 +2,10 @@
 <html>
 <head>
 	<title>Basic Image Editor</title>
-	<link rel="stylesheet" type="text/css" href="gui.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link rel='shortcut icon' type='image/x-icon' href='favicon.ico' />
+	<link rel="stylesheet" type="text/css" href="web_resources/gui.css">
+	<link rel="stylesheet" href="web_resources/bootstrap.min.css">
+	<script src="web_resources/jquery.min.js"></script>
 </head>
 <body>
 	<?php
