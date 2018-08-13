@@ -3,9 +3,9 @@
 <head>
 	<title>Basic Image Editor</title>
 	<link rel='shortcut icon' type='image/x-icon' href='favicon.ico' />
-	<link rel="stylesheet" type="text/css" href="web_resources/gui.css">
 	<link rel="stylesheet" href="web_resources/bootstrap.min.css">
 	<script src="web_resources/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="web_resources/gui.css">
 </head>
 <body>
 	<?php
@@ -47,6 +47,24 @@
 					Gamma Correct
 				</button>
 			</div>
+			<div id="blur_frame">
+				<input id="blur_range" type="range" min="1" max="100" value="50">
+				<button type="button" class="btn btn-default btn-md" id="blur">
+					Blur
+				</button>
+			</div>
+			<div id="sharp_frame">
+				<input id="sharp_range" type="range" min="1" max="100" value="50">
+				<button type="button" class="btn btn-default btn-md" id="sharp">
+					Sharp
+				</button>
+			</div>
+			<button type="button" class="btn btn-default btn-md" id="undo">
+				<span style="transform: rotateY(180deg);" class="glyphicon glyphicon-repeat"></span> Undo
+			</button><br>
+			<button type="button" class="btn btn-default btn-md" id="undo">
+				<span class="glyphicon glyphicon-refresh"></span> Reset
+			</button><br>
 		</div>
 	</controls>
 </body>

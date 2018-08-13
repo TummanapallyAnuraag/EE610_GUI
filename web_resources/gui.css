@@ -51,3 +51,7 @@ input[type="file"] {
     padding: 6px 12px;
     cursor: pointer;
 }
+
+input[type=range]{
+	width: 200px;
+}
