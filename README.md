@@ -103,6 +103,10 @@ a) Check if the folder `images` has 777 permissions. If not you can do so by usi
 
 The -R is used for recursion (folder within folder scenario)
 
+Also change the owner to www-data
+
+`sudo chown -R www-data:www-data images/`
+
 b) The image upload size must be more than the permissible limit.
 
 You can check and change this *permissible limit* in /etc/php/7.0/apache2/php.ini
