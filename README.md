@@ -35,3 +35,56 @@ You can refer [this pgae](https://www.tutorialspoint.com/perl/perl_cgi.htm) for 
 * .htaccess: settings can be mentioned in this file for each specific directory.
 
 You can refer [this page](http://www.htaccess-guide.com/) for more information.
+
+## SETUP
+I have tested this code in xubuntu 16.04 and ubuntu 16.04, but i am 99% sure that this will work in all ubuntu machines..
+
+Following are the steps to be followed for using this code on a fresh machine
+
+* Setup APACHE.
+
+`sudo apt install apache2`
+
+* Copy this code to web directory (/var/www/html/)
+
+`cd /var/www/html`
+
+`git clone https://github.com/TummanapallyAnuraag/EE610_GUI.git gui`
+
+* Enable CGI execution in apache2
+
+`sudo a2enmod cgi`
+
+`sudo service apache2 restart`
+
+* Add the following lines of code in /etc/apache2/sites-enabled/000-default.conf
+
+```
+<Directory "/var/www/html/gui">
+	AllowOverride All
+</Directory>
+```
+
+* After any kind of changes to apache2 configuration files, we need to reload it.
+
+`sudo service apache2 restart`
+
+* Once all the above steps are done, the GUI can be seen at [http://localhost/gui](http://localhost/gui)
+
+But if you face any problems while any of the steps, you can debug them with help of next step
+
+* (Optional) If you want debug information, add this line of code to the same 000-default.conf file
+
+`LogLevel debug`
+
+You can see the debug information in /var/log/apache2/error.log
+
+This command comes in handy at times..
+
+`tail -f /var/log/apache2/error.log`
+
+Web Help: look in [StackOverflow](https://stackoverflow.com/)
+
+Worst case scenario: You can always drop a mail to me. You can find my details [here](https://www.ee.iitb.ac.in/~anuraagt/)
+
+* Remember: Always restart apache2 service whenever you chnage the configuration files of apache2
