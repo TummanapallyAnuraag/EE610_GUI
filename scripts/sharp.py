@@ -58,6 +58,7 @@ foldername = getparam('foldername','_target')
 filename = getparam('filename','0.jpg')
 operation_num = getparam('opn','1')
 format = getparam('format','jpg')
+scale = float(getparam('scale', 0.25))
 
 I = imread('../images/'+foldername+'/'+filename)
 I_hsv = color.rgb2hsv(I)
@@ -75,7 +76,7 @@ kernel = np.array([
 
 Gcopy = Gray + 0
 mask = my_conv(Gcopy, kernel)
-Gray = Gray + 0.5*mask
+Gray = Gray + scale*mask
 Gray = Gray/255;
 
 np.place(Gray, Gray>1, 1.0)

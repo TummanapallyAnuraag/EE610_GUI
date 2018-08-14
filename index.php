@@ -4,8 +4,9 @@
 	<title>Basic Image Editor</title>
 	<link rel='shortcut icon' type='image/x-icon' href='favicon.ico' />
 	<link rel="stylesheet" href="web_resources/bootstrap.min.css">
-	<script src="web_resources/jquery.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="web_resources/gui.css">
+	<script src="web_resources/jquery.min.js"></script>
+	<script src="web_resources/gui.js"></script>
 </head>
 <body>
 	<?php
@@ -15,7 +16,8 @@
 	?>
 	<div id="body-overlay"><div><img src="images/_gui/loading.gif" width="64px" height="64px"/></div></div>
 	<plank>
-		<img id="target" src="images/_gui/default.jpg" style="transform:scale(1);">
+		<img id="target" src="images/_gui/default.jpg" onload="hideLoading();" style="transform:scale(1);">
+		<img id="target_0" src="images/_gui/default.jpg" onload="hideLoading();" style="transform:scale(1);display:none;">
 	</plank>
 	<controls>
 		<div>
@@ -37,7 +39,7 @@
 			</button><br>
 			<a id="target_slave" href="images/_gui/default.jpg" download>
 				<button type="button" class="btn btn-default btn-md">
-					Download
+					<span class="glyphicon glyphicon-save"></span> Save
 				</button>
 			</a><br>
 			<button type="button" class="btn btn-default btn-md" id="logtx">
@@ -50,13 +52,13 @@
 				</button>
 			</div>
 			<div id="blur_frame">
-				<input id="blur_range" type="range" min="1" max="100" value="50">
+				<input id="blur_range" type="range" min="1" max="25" value="15">
 				<button type="button" class="btn btn-default btn-md" id="blur">
 					Blur
 				</button>
 			</div>
 			<div id="sharp_frame">
-				<input id="sharp_range" type="range" min="1" max="100" value="50">
+				<input id="sharp_range" divideby="100" type="range" min="1" max="25" value="10">
 				<button type="button" class="btn btn-default btn-md" id="sharp">
 					Sharp
 				</button>
@@ -67,169 +69,10 @@
 			<button type="button" class="btn btn-default btn-md" id="reset">
 				<span class="glyphicon glyphicon-refresh"></span> Reset
 			</button><br>
+			<button type="button" class="btn btn-default btn-md" id="targetChange" show="0">
+				<span class="glyphicon glyphicon-eye-open"></span> View <span id="text">Original</span>
+			</button><br>
 		</div>
 	</controls>
 </body>
-<script type="text/javascript">
-	window.opn = 0;
-	window.image = {};
-	window.image.format = 'jpg';
-	$('#upload_button').bind("click" , function () {
-        $('#upload_input').click();
-    });
-
-	$('#zoom_in').on('click',function(){
-		var scale = $('#target').css('transform');
-		scale = scale.replace('matrix(','').replace(')','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').split(',')[0];
-		scale = parseFloat(scale) + 0.1;
-		$('#target').css('transform','scale('+scale+')');
-	});
-
-	$('#zoom_out').on('click',function(){
-		var scale = $('#target').css('transform');
-		scale = scale.replace('matrix(','').replace(')','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').split(',')[0];
-		scale = parseFloat(scale) - 0.1;
-		if(scale > 0.5){
-			$('#target').css('transform','scale('+scale+')');
-		}else{
-			console.log('Zoom out limit reached');
-		}
-	});
-
-	$('#undo').on('click',function(){
-		window.opn = window.opn - 1;
-		if(window.opn < 0){
-			window.opn = 0;
-		}
-		d = new Date();
-		var image_name = 'images/_target/' + window.opn + '.' + window.image.format;
-		$('#target').attr('src', image_name+'?'+d.getTime());
-		$('#target_slave').attr('href', image_name+'?'+d.getTime());
-	});
-
-	$('#reset').on('click',function(){
-		window.opn = 0;
-		d = new Date();
-		var image_name = 'images/_target/' + window.opn + '.' + window.image.format;
-		$('#target').attr('src', image_name+'?'+d.getTime());
-		$('#target_slave').attr('href', image_name+'?'+d.getTime());
-	});
-
-	$('#histeq').on('click',function(){
-		var filename = window.opn +'.'+ window.image.format;
-		window.opn = window.opn + 1;
-		$.ajax({
-        	url: "scripts/histeq.py?opn="+window.opn+"&format="+window.image.format+"&filename="+filename,
-			type: "GET",
-			beforeSend: function(){$("#body-overlay").show();},
-			success: function(data){
-				try{
-					var image_name = JSON.parse(data)['filename'];
-			    	if(image_name.length < 1){
-			    		image_name = 'images/_gui/default.jpg';
-			    		alert("There was some error while Uploading the Image !");
-			    	}
-					d = new Date();
-			    	$('#target').attr('src', image_name+'?'+d.getTime());
-					$('#target_slave').attr('href', image_name+'?'+d.getTime());
-					setInterval(function(){
-						$("#body-overlay").hide();
-					},500);
-				}catch(error){
-					console.error(error);
-					alert('Some ERROR occured !');
-				}
-			}
-	   });
-	});
-
-	$('#logtx').on('click',function(){
-		var filename = window.opn +'.'+ window.image.format;
-		window.opn = window.opn + 1;
-		$.ajax({
-        	url: "scripts/logtx.py?opn="+window.opn+"&format="+window.image.format+"&filename="+filename,
-			type: "GET",
-			beforeSend: function(){$("#body-overlay").show();},
-			success: function(data){
-				try{
-					var image_name = JSON.parse(data)['filename'];
-			    	if(image_name.length < 1){
-			    		image_name = 'images/_gui/default.jpg';
-			    		alert("There was some error while Uploading the Image !");
-			    	}
-					d = new Date();
-			    	$('#target').attr('src', image_name+'?'+d.getTime());
-					$('#target_slave').attr('href', image_name+'?'+d.getTime());
-					setInterval(function(){
-						$("#body-overlay").hide();
-					},500);
-				}catch(error){
-					console.error(error);
-					alert('Some ERROR occured !');
-				}
-			}
-	   });
-   });
-
-   $('#gamma_correct').on('click',function(){
-		var filename = window.opn +'.'+ window.image.format;
-		window.opn = window.opn + 1;
-		var gamma = $('#gamma_correct_frame input').val();
-		$.ajax({
-        	url: "scripts/gammacrct.py?opn="+window.opn+"&format="+window.image.format+"&filename="+filename+"&gamma="+gamma,
-			type: "GET",
-			beforeSend: function(){$("#body-overlay").show();},
-			success: function(data){
-				try{
-					var image_name = JSON.parse(data)['filename'];
-					if(image_name.length < 1){
-						image_name = 'images/_gui/default.jpg';
-						alert("There was some error while Uploading the Image !");
-					}
-					d = new Date();
-					$('#target').attr('src', image_name+'?'+d.getTime());
-					$('#target_slave').attr('href', image_name+'?'+d.getTime());
-					setInterval(function(){
-						$("#body-overlay").hide();
-					},500);
-				}catch(error){
-					console.error(error);
-					alert('Some ERROR occured !');
-				}
-			}
-	   });
-	});
-
-    function customSubmit(obj){
-    	$.ajax({
-        	url: "upload.php",
-			type: "POST",
-			data:  new FormData(obj),
-			beforeSend: function(){$("#body-overlay").show();},
-			contentType: false,
-    	    processData:false,
-			success: function(data){
-				try{
-					window.opn = 0;
-					var image_name = JSON.parse(data)['filename'];
-					window.image.format = JSON.parse(data)['format'];
-					if(image_name.length < 1){
-						image_name = 'images/_gui/default.jpg';
-						alert("There was some error while Uploading the Image !");
-					}
-					d = new Date();
-					$('#target').attr('src', image_name+'?'+d.getTime());
-					$('#target_slave').attr('href', image_name+'?'+d.getTime());
-					setInterval(function(){
-						$("#body-overlay").hide();
-					},500);
-				}catch(error){
-					console.error(error);
-					alert('Some ERROR occured !');
-				}
-			}
-	   });
-    }
-
-</script>
 </html>
