@@ -52,12 +52,12 @@ $(window).on('load', function(){
     $('#blur').on('click',function(){
         var file = window.opn +'.'+ window.image.format;
         window.opn = window.opn + 1;
-        var size = jQuery('#blur_range').val();
+        var sig = jQuery('#blur_range').val();
         dataParams = {
             filename    : file,
             opn         : window.opn,
             format      : window.image.format,
-            size        : size
+            sig        : sig
         }
         performOperation(dataParams, 'blur.py');
     });
@@ -72,7 +72,7 @@ $(window).on('load', function(){
             filename    : file,
             opn         : window.opn,
             format      : window.image.format,
-            scale        : scale
+            scale       : scale
         }
         performOperation(dataParams, 'sharp.py');
     });

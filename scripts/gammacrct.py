@@ -8,15 +8,6 @@ def getparam(param, def_val = ''):
         val = def_val
     return val
 
-def getformat(filename, def_val = 'png'):
-    str_list = filename.split('.')
-    format = str_list[-1]
-    if format:
-        val = format
-    else:
-        val = def_val
-    return val
-
 # All Kinds of Imports
 import sys
 # Look for the packages here..

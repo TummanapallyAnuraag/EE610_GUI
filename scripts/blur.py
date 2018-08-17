@@ -8,15 +8,6 @@ def getparam(param, def_val = ''):
         val = def_val
     return val
 
-def getformat(filename, def_val = 'png'):
-    str_list = filename.split('.')
-    format = str_list[-1]
-    if format:
-        val = format
-    else:
-        val = def_val
-    return val
-
 def my_conv(Img, filter):
     #With Zero Padding
     Ret = Img;
@@ -36,6 +27,22 @@ def my_conv(Img, filter):
 
     return Ret
 
+def gausskernel(size, sig):
+    # size should be odd
+    size = size + (size+1.)%2
+    xmin = -(size - 1)/2
+    xmax =  (size - 1)/2
+    x = np.arange(xmin, xmax + 1.)
+    G = np.zeros((size,size),dtype='float')
+    sum = 0
+    for i in np.arange(size):
+        for j in np.arange(size):
+            arg = - (x[i]**2. + x[j]**2.)/(2.*(sig**2.))
+            G[i,j] = np.exp(arg)
+            sum = sum + G[i,j]
+
+    G = G/sum
+    return G
 
 # All Kinds of Imports
 import sys
@@ -58,7 +65,7 @@ foldername = getparam('foldername','_target')
 filename = getparam('filename','0.jpg')
 operation_num = getparam('opn','1')
 format = getparam('format','jpg')
-size = float(getparam('size',1));
+sig = float(getparam('sig',1));
 
 I = imread('../images/'+foldername+'/'+filename)
 I_hsv = color.rgb2hsv(I)
@@ -68,11 +75,12 @@ Gray = I_hsv[:,:,2]
 # Gray = Gray*255;
 
 # Construct kernel
-if(size % 2 == 0):
-    size = size + 1
-
-kernel = np.ones((size,size),dtype='float')
-kernel = kernel/np.sum(kernel)
+# if(size % 2 == 0):
+#     size = size + 1
+#
+# kernel = np.ones((size,size),dtype='float')
+# kernel = kernel/np.sum(kernel)
+kernel = gausskernel(2*sig, sig)
 Gray = my_conv(Gray, kernel)
 # Gray = Gray/255;
 

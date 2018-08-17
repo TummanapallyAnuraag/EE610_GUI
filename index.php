@@ -52,13 +52,13 @@
 				</button>
 			</div>
 			<div id="blur_frame">
-				<input id="blur_range" type="range" min="1" max="25" value="15">
+				<input id="blur_range" type="range" min="1" max="30" value="15">
 				<button type="button" class="btn btn-default btn-md" id="blur">
 					Blur
 				</button>
 			</div>
 			<div id="sharp_frame">
-				<input id="sharp_range" divideby="100" type="range" min="1" max="25" value="10">
+				<input id="sharp_range" divideby="100" type="range" min="1" max="50" value="10">
 				<button type="button" class="btn btn-default btn-md" id="sharp">
 					Sharp
 				</button>

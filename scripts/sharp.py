@@ -8,15 +8,6 @@ def getparam(param, def_val = ''):
         val = def_val
     return val
 
-def getformat(filename, def_val = 'png'):
-    str_list = filename.split('.')
-    format = str_list[-1]
-    if format:
-        val = format
-    else:
-        val = def_val
-    return val
-
 def my_conv(Img, filter):
     #With Zero Padding
     Ret = Img;
@@ -65,7 +56,6 @@ I_hsv = color.rgb2hsv(I)
 Gray = I_hsv[:,:,2]
 
 # Perform all operations here..
-Gray = Gray*255;
 
 # Kernel construcion
 kernel = np.array([
@@ -74,14 +64,20 @@ kernel = np.array([
 [0, -1, 0]
 ],dtype='float')
 
-Gcopy = Gray + 0
-mask = my_conv(Gcopy, kernel)
-Gray = Gray + scale*mask
-Gray = Gray/255;
+mask = my_conv(Gray, kernel)
 
-np.place(Gray, Gray>1, 1.0)
+np.place(mask, mask>1.0, 1.0)
+np.place(mask, mask<0.0, 0.0)
+
+Gray = Gray + scale*mask
+
+np.place(Gray, Gray>1.0, 1.0)
+np.place(Gray, Gray<0.0, 0.0)
+
 I_hsv[:,:,2] = Gray
 imsave('../images/_target/'+operation_num+'.'+format, color.hsv2rgb(I_hsv));
 
 # END
-print(json.dumps({ 'filename' : 'images/_target/'+operation_num+'.'+format }))
+print(json.dumps({
+    'filename' : 'images/_target/'+operation_num+'.'+format
+}))
