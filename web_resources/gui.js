@@ -116,6 +116,13 @@ $(window).on('load', function(){
         }
         performOperation(dataParams, 'gammacrct.py');
     });
+
+    $.ajax({
+        url: "scripts/imports.py",
+        success: function(data){
+            console.log(data);
+        }
+   });
 });
 
 /** FUNCTION DEFINITIONS **/
