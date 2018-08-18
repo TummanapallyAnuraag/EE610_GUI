@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+# This will get us the parameter from the GET/POST request from the webpage
 def getparam(param, def_val = ''):
     data = cgi.FieldStorage()
     if data.getvalue(param):
@@ -25,22 +26,27 @@ import json
 print ("Content-type:text/html\r\n\r\n")
 
 # LOGIC
-foldername = getparam('foldername','_target')
-filename = getparam('filename','0.jpg')
-operation_num = getparam('opn','1')
-format = getparam('format','jpg')
-gamma = float(getparam('gamma',0.5))
-gain = float(getparam('gain',1))
 
-I = imread('../images/'+foldername+'/'+filename)
-I_hsv = color.rgb2hsv(I)
-Gray = I_hsv[:,:,2]
+# Get some parameters
+foldername      = getparam('foldername','_target')
+filename        = getparam('filename','0.jpg')
+operation_num   = getparam('opn','1')
+format          = getparam('format','jpg')
+gamma           = float(getparam('gamma',0.5))
+gain            = float(getparam('gain',1))
 
-# Perform all operations here..
+# Read Image, RGB->HSV, perform operations on 'V' plane
+I       = imread('../images/'+foldername+'/'+filename)
+I_hsv   = color.rgb2hsv(I)
+Gray    = I_hsv[:,:,2]
 
+# Performing all operations here..
 Gray = gain*np.power(Gray,gamma)
 
+# Just to be sure..
 np.place(Gray, Gray>1, 1)
+
+# Put it back and save the image
 I_hsv[:,:,2] = Gray
 imsave('../images/_target/'+operation_num+'.'+format, color.hsv2rgb(I_hsv));
 

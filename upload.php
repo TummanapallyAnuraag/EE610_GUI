@@ -1,9 +1,12 @@
 <?php
+/* Some part of this code is inspired from https://www.w3schools.com/ */
+/*Varialbe Declarations - self explanatory*/
 $target_dir = "images/_target/";
 $uploadOk = 1;
 $imageFileType = strtolower(pathinfo(basename($_FILES["pic"]["name"]),PATHINFO_EXTENSION));
 $target_file = $target_dir . "0." . $imageFileType;
 
+/* Response to be sent to the Webpage */
 $response = array();
 $response["filename"] = "";
 $response["format"] = "";
@@ -35,5 +38,6 @@ if ($uploadOk == 0) {
         $response[] = "Sorry, there was an error uploading your file.";
     }
 }
+/* JSON is a popular format to send data to and from webpages */
 echo json_encode($response);
 ?>

@@ -1,9 +1,7 @@
-#<Directory /var/www/html/gui>
-#	Options Indexes FollowSymLinks MultiViews ExecCGI
-#        AllowOverride All
-#        Order allow,deny
-#        allow from all
-#        AddHandler cgi-script .cgi .py
-#</Directory>
+# This line asks apache to execute .cgi and .py files in cgi mode.
 AddHandler cgi-script .cgi .py
+
+# This line says that the files in this folder can be executed as CGI.
 Options ExecCGI
+
+# For more information visit: https://httpd.apache.org/docs/current/howto/htaccess.html
