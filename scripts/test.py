@@ -16,6 +16,35 @@ def gausskernel(size, sig):
     G = G/sum
     return G
 
+def my_histeq(Image):
+    HeqImg = Image
+    (R,C) = Image.shape
+    Freq = np.zeros((256,1),dtype='float')
+    for i in np.arange(R):
+        for j in np.arange(C):
+            Freq[ Image[i,j] ] += 1.
+    CDF = np.cumsum(Freq)/(R*C)
+    for i in np.arange(R):
+        for j in np.arange(C):
+            HeqImg[i,j] = int( CDF[ Image[i,j] ]*255. )
+    np.place(HeqImg, HeqImg>255, 255)
+    np.place(HeqImg, HeqImg<0, 0)
+
+    return HeqImg
+
+def my_histeq2(Image):
+    HeqImg = Image
+    (R,C) = Image.shape
+    # This is the Freq count array, type float because we want CDF to be float.
+    Freq = np.zeros((256,1),dtype='float')
+    for v in np.arange(256, dtype='int'):
+        Freq[v] = np.count_nonzero( np.all([ (Image >= v-0.5), (Image < v+0.5) ], axis=0) )
+    # Max CDF values is 1
+    CDF = np.cumsum(Freq)/(R*C)
+    for v in np.arange(256, dtype='int'):
+        np.place(HeqImg, np.all([ (Image >= v-0.5), (Image < v+0.5) ], axis=0), CDF[v]*255.0)
+    return HeqImg
+
 # All Kinds of Imports
 import sys
 # Look for the packages here..
@@ -32,4 +61,8 @@ import math
 I = imread('../images/_target/0.jpg')
 I_hsv = color.rgb2hsv(I)
 Gray = I_hsv[:,:,2]
-print(np.max(Gray), np.min(Gray))
+Gray = Gray*255.0
+Gray = my_histeq2(Gray)
+Gray = Gray/255.0
+I_hsv[:,:,2] = Gray
+imsave('../images/_target/test.jpg', color.hsv2rgb(I_hsv) )
