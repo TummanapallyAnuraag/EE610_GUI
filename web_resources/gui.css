@@ -37,9 +37,38 @@ controls{
 controls>div{
 	height: 100%;
 	top: 0;
-	width: 100%;
+	width: inherit;
 	padding: 10px;
 	position: fixed;
+}
+
+.control-box{
+	padding: 10px;
+	border: 2px dashed grey;
+	margin-bottom: 10px;
+}
+
+.control-row{
+	display: inline-table;
+}
+
+.control-box button{
+	width: 90px;
+}
+
+.control-row-single{
+	display: inline-table;
+	margin-bottom: 5px;
+}
+.control-row-single button{
+	width: 205px;
+	margin-left: 15px;
+}
+
+.control-row-single input{
+	width: 210px;
+	margin-left: 15px;
+	margin-bottom: 5px;
 }
 
 input[type="file"] {
@@ -55,4 +84,14 @@ input[type="file"] {
 
 input[type=range]{
 	width: 200px;
+}
+
+#blur_range, #sharp_range{
+	cursor: pointer;
+}
+
+.control-box button:hover{
+	color: white;
+	background-color: green;
+	box-shadow: 3px 3px 10px grey;
 }
