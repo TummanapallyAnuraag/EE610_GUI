@@ -73,21 +73,17 @@ else:
 # Perform all operations here..
 
 # Kernel construcion
+# I = I*impulse3 + I*kernelxscale
+# I = I*(impulse3 + scalexkernel)
+# Therefore..
 kernel = np.array([
-[0, -1, 0],
-[-1, 4, -1],
-[0, -1, 0]
+[-1*scale, -1*scale, -1*scale],
+[-1*scale, 1+8*scale, -1*scale],
+[-1*scale, -1*scale, -1*scale]
 ],dtype='float')
 
 # Convolution
-mask = my_conv(Gray, kernel)
-
-# Just to be sure..
-np.place(mask, mask>1.0, 1.0)
-np.place(mask, mask<0.0, 0.0)
-
-# Adding to the original image
-Gray = Gray + scale*mask
+Gray = my_conv(Gray, kernel)
 
 # Just to be sure..
 np.place(Gray, Gray>1.0, 1.0)
