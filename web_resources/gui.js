@@ -253,3 +253,26 @@ function showTarget(num = 1){
         $('#targetChange .glyphicon').removeClass('glyphicon-eye-close').addClass('glyphicon-eye-open');
     }
 }
+
+/*Function for archiving*/
+function archiveOnServer(){
+    var filename = window.opn + '.' + window.image.format;
+    var format = window.image.format;
+    dataParams = {
+        filename    : filename,
+        format      : format
+    }
+    $.ajax({
+        url: "archive.php",
+        type: "GET",
+        data: dataParams,
+        beforeSend: function(){
+            /* The loading... image will be shown*/
+            showLoading();
+        },
+        success: function(data){
+            hideLoading();
+            alert(data);
+        }
+   });
+}
