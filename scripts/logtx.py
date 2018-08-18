@@ -33,12 +33,19 @@ format          = getparam('format','jpg')
 
 # Read Image, RGB->HSV, perform operations on 'V' plane
 I       = imread('../images/'+foldername+'/'+filename)
-I_hsv   = color.rgb2hsv(I)
-Gray    = I_hsv[:,:,2]
+if (len(I.shape) == 3):
+    RGB = 1
+    I_hsv   = color.rgb2hsv(I)
+    Gray    = I_hsv[:,:,2]
+    Gray = Gray*255;
+else:
+    RGB = 0
+    Gray    = I
+    # This has already values from 0->255
+    Gray.astype(float)
 
 # Performing all operations here..
 c = float(getparam('c',30));
-Gray = Gray*255;
 Gray = c*np.log10(Gray + 1);
 Gray = Gray/255;
 
@@ -46,8 +53,13 @@ Gray = Gray/255;
 np.place(Gray, Gray>1, 1)
 
 # Put it back and save the image
-I_hsv[:,:,2] = Gray
-imsave('../images/_target/'+operation_num+'.'+format, color.hsv2rgb(I_hsv));
+if (RGB == 1):
+    I_hsv[:,:,2]    = Gray
+    I               = color.hsv2rgb(I_hsv)
+else:
+    I  = Gray
+
+imsave('../images/_target/'+operation_num+'.'+format, I);
 
 # END
 print(json.dumps({ 'filename' : 'images/_target/'+operation_num+'.'+format }))

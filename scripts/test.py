@@ -58,11 +58,16 @@ import json
 import math
 
 # HTML CONTENT BEGINS
+print ("Content-type:text/html\r\n\r\n")
+
 I = imread('../images/_target/0.jpg')
+I2 = imread('../images/_gui/default.png')
+print(np.array(I2.shape))
+exit()
 I_hsv = color.rgb2hsv(I)
 Gray = I_hsv[:,:,2]
-Gray = Gray*255.0
-Gray = my_histeq2(Gray)
-Gray = Gray/255.0
-I_hsv[:,:,2] = Gray
-imsave('../images/_target/test.jpg', color.hsv2rgb(I_hsv) )
+# Gray = Gray*255.0
+# Gray = my_histeq2(Gray)
+# Gray = Gray/255.0
+# I_hsv[:,:,2] = Gray
+imsave('../images/_target/gray.jpg', Gray )
