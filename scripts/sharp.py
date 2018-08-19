@@ -61,7 +61,7 @@ scale           = float(getparam('scale', 0.25))
 I = imread('../images/'+foldername+'/'+filename)
 if (len(I.shape) == 3):
     RGB = 1
-    I_hsv   = color.rgb2hsv(I)
+    I_hsv   = color.rgb2hsv(I[:,:,0:3])
     Gray    = I_hsv[:,:,2]
 else:
     RGB = 0
