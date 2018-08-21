@@ -2,9 +2,44 @@
 window.opn = 0;
 window.image = {};
 window.image.format = 'jpg';
+window.image.mousedown = {};
 
 /* Some onclick functions */
 $(window).on('load', function(){
+
+    $('plank').on('mousewheel', function(e){
+        if(e.originalEvent.deltaY > 0){
+            /* scroll down */
+            $('#zoom_in').trigger('click');
+        }else{
+            /* scroll up */
+            $('#zoom_out').trigger('click');
+        }
+    });
+
+    $('#target').mousedown(function(e){
+        window.image.mousedown.flag = 1;
+        window.image.mousedown.pageX = e.pageX;
+        window.image.mousedown.pageY = e.pageY;
+        window.image.mousedown.left = parseInt(this.style.left == 0 ? 0 : this.style.left);
+        window.image.mousedown.top = parseInt(this.style.top == 0 ? 0 : this.style.top);
+        e.preventDefault();
+    });
+
+    $('#target').mouseup(function(e){
+        window.image.mousedown.flag = 0;
+        e.preventDefault();
+    });
+
+    $('#target').mousemove(function(e){
+        e.preventDefault();
+        if(window.image.mousedown.flag == 1){
+            delx = e.pageX - window.image.mousedown.pageX;
+            dely = e.pageY - window.image.mousedown.pageY;
+            this.style.top = window.image.mousedown.top + dely + 'px';
+            this.style.left = window.image.mousedown.left + delx + 'px';
+        }
+    });
 
     /* Trigger click of input tag when button tag is clicked  */
     $('#upload_button').bind("click" , function () {
