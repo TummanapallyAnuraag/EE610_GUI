@@ -171,6 +171,24 @@ $(window).on('load', function(){
         performOperation(dataParams, 'gammacrct.py');
     });
 
+    /* salt and pepper noise */
+    $('#spnoise').on('click',function(){
+        var file = window.opn +'.'+ window.image.format;
+        window.opn = window.opn + 1;
+
+        /* The HTML slider can only take integer values, so this workaround is done. */
+        var scale = jQuery('#spnoise_range').val();
+        var divideby_val = jQuery('#spnoise_range').attr('divideby');
+        scale = scale/divideby_val;
+        dataParams = {
+            filename    : file,
+            opn         : window.opn,
+            format      : window.image.format,
+            scale       : scale
+        }
+        performOperation(dataParams, 'spnoise.py');
+    });
+
     /* Import some packages on load, and load in RAM so that it will reduce time to load
      the packages in future.
      It was observed that around 8-10 seconds of time was being wasted to load the packages.

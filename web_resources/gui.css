@@ -43,6 +43,7 @@ controls>div{
 	width: inherit;
 	padding: 10px;
 	position: fixed;
+	overflow: auto;
 }
 
 .control-box{

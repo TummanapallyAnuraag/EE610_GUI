@@ -128,11 +128,22 @@
 				<!-- Sharpening -->
 				<div class="control-row-single">
 					<div id="sharp_frame">
-					<input id="sharp_range" class="form-control" divideby="100" type="range" min="1" max="50" value="10">
-					<button type="button" class="btn btn-default btn-md" id="sharp">
-						Sharp
-					</button>
+						<input id="sharp_range" class="form-control" divideby="100" type="range" min="1" max="50" value="10">
+						<button type="button" class="btn btn-default btn-md" id="sharp">
+							Sharp
+						</button>
+					</div>
 				</div>
+			</div>
+			<div class="control-box">
+				<!-- Salt & Pepper Noise-->
+				<div class="control-row-single">
+					<div id="spnoise_frame">
+						<input id="spnoise_range" class="form-control" divideby="100" type="range" min="1" max="50" value="10">
+						<button type="button" class="btn btn-default btn-md" id="spnoise">
+							Add Salt & Pepper Noise
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
