@@ -48,34 +48,34 @@
 					<!-- Zoom In -->
 					<div class="col-sm-6">
 						<button type="button" class="btn btn-default btn-md" id="zoom_in">
-						<span class="glyphicon glyphicon-zoom-in"></span> Max
-					</button>
+							<span class="glyphicon glyphicon-zoom-in"></span> Max
+						</button>
 					</div>
 					<!-- Zoom Out -->
 					<div class="col-sm-6">
 						<button type="button" class="btn btn-default btn-md" id="zoom_out">
-						<span class="glyphicon glyphicon-zoom-out"></span> Min
-					</button>
+							<span class="glyphicon glyphicon-zoom-out"></span> Min
+						</button>
 					</div>
 				</div>
 				<div class="control-row">
 					<!-- Undo -->
 					<div class="col-sm-6">
 						<button type="button" class="btn btn-default btn-md" id="undo">
-						<span style="transform: rotateY(180deg);" class="glyphicon glyphicon-repeat"></span> Undo
-					</button>
+							<span style="transform: rotateY(180deg);" class="glyphicon glyphicon-repeat"></span> Undo
+						</button>
 					</div>
 					<!-- Reset -->
 					<div class="col-sm-6">
 						<button type="button" class="btn btn-default btn-md" id="reset">
-						<span class="glyphicon glyphicon-refresh"></span> Reset
-					</button>
+							<span class="glyphicon glyphicon-refresh"></span> Undo All
+						</button>
 					</div>
 				</div>
 				<!-- Toggle View - Original/Recent Image -->
 				<div class="control-row-single" >
 						<button type="button" class="btn btn-default btn-md" id="targetChange" show="0">
-						<span class="glyphicon glyphicon-eye-open"></span> View <span id="text">Original</span>
+							<span class="glyphicon glyphicon-eye-open"></span> View <span id="text">Original</span>
 						</button>
 				</div>
 			</div>

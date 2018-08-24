@@ -7,7 +7,7 @@ window.image.mousedown = {};
 /* Some onclick functions */
 $(window).on('load', function(){
 
-    $('plank').on('mousewheel', function(e){
+    $('plank').on('wheel', function(e){
         if(e.originalEvent.deltaY > 0){
             /* scroll down */
             $('#zoom_in').trigger('click');
