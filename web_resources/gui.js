@@ -39,6 +39,8 @@ $(window).on('load', function(){
             dely = e.pageY - window.image.mousedown.pageY;
             this.style.top = window.image.mousedown.top + dely + 'px';
             this.style.left = window.image.mousedown.left + delx + 'px';
+            document.getElementById('target_0').style.top = window.image.mousedown.top + dely + 'px';
+            document.getElementById('target_0').style.left = window.image.mousedown.left + delx + 'px';
         }
     });
 
