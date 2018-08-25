@@ -7,13 +7,14 @@ window.image.mousedown = {};
 /* Some onclick functions */
 $(window).on('load', function(){
 
+    /* when scroll happens in the image display area.. shrink and enlarge the image */
     $('plank').on('wheel', function(e){
         if(e.originalEvent.deltaY > 0){
-            /* scroll down */
-            $('#zoom_in').trigger('click');
-        }else{
-            /* scroll up */
+            /* zoom out on scroll down */
             $('#zoom_out').trigger('click');
+        }else{
+            /* zoom in on scroll up */
+            $('#zoom_in').trigger('click');
         }
     });
 
