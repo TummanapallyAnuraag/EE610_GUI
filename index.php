@@ -27,7 +27,7 @@
 				<!-- Upload Image -->
 				<div class="control-row">
 					<div class="col-sm-6">
-					<form id="image_form" method="POST" action="upload.php" enctype="multipart/form-data">
+					<form id="image_form" method="POST" action="upload.py" enctype="multipart/form-data">
 						<button type="button" class="btn btn-default btn-md" id="upload_button">
 							<span class="glyphicon glyphicon-upload"></span> Upload
 						</button>

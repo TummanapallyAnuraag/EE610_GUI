@@ -208,7 +208,7 @@ $(window).on('load', function(){
 function customSubmit(obj){
     /* This function will send a AJAX request to upload file - which saves the uploaded file */
     $.ajax({
-        url: "upload.php",
+        url: "upload.py",
         type: "POST",
         data:  new FormData(obj),
         beforeSend: function(){$("#body-overlay").show();},
@@ -217,8 +217,9 @@ function customSubmit(obj){
         success: function(data){
             try{
                 window.opn = 0;
-                var image_name = JSON.parse(data)['filename'];
-                window.image.format = JSON.parse(data)['format'];
+                data_json = JSON.parse(data);
+                var image_name = data_json['filename'];
+                window.image.format = data_json['format'];
                 if(image_name.length < 1){
                     image_name = 'images/_gui/default.jpg';
                     alert("There was some error while Uploading the Image !");
@@ -227,6 +228,9 @@ function customSubmit(obj){
                 $('#target').attr('src', image_name+'?'+d.getTime());
                 $('#target_0').attr('src', image_name+'?'+d.getTime());
                 $('#target_slave').attr('href', image_name+'?'+d.getTime());
+                if(data_json['message'].length > 0){
+                    alert(data_json['message']);
+                }
                 // setInterval(function(){
                 //     $("#body-overlay").hide();
                 // },500);
