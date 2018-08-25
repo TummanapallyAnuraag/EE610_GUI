@@ -74,9 +74,13 @@ $(window).on('load', function(){
     /* Undo 1 operation on button click */
     $('#undo').on('click',function(){
         window.opn = window.opn - 1;
-        if(window.opn < 0){
+        if(window.opn <= 0){
             window.opn = 0;
+            $('#undo .text').html("Undo");
+        }else{
+            $('#undo .text').html("Undo"+" (" + window.opn + ")");
         }
+
         /* this date thing is being appended because,it is uniqe for each moment,
          if the same URL of image is replaced,
          the browser will load the image from its cache, and image doesn't get updated. */
@@ -90,6 +94,7 @@ $(window).on('load', function(){
     /* Self explanatory */
     $('#reset').on('click',function(){
         window.opn = 0;
+        $('#undo .text').html("Undo");
         d = new Date();
         var image_name = 'images/_target/' + window.opn + '.' + window.image.format;
         $('#target').attr('src', image_name+'?'+d.getTime());
@@ -100,7 +105,7 @@ $(window).on('load', function(){
     /* Blur image on button click */
     $('#blur').on('click',function(){
         var file = window.opn +'.'+ window.image.format;
-        window.opn = window.opn + 1;
+        addOpnCount();
         /* Get the gima value and send to the pythoin script */
         var sig = jQuery('#blur_range').val();
         dataParams = {
@@ -114,7 +119,7 @@ $(window).on('load', function(){
 
     $('#sharp').on('click',function(){
         var file = window.opn +'.'+ window.image.format;
-        window.opn = window.opn + 1;
+        addOpnCount();
 
         /* The HTML slider can only take integer values, so this workaround is done. */
         var scale = jQuery('#sharp_range').val();
@@ -138,7 +143,7 @@ $(window).on('load', function(){
     /* Histogram Equalisation - self explanatory (refer earlier operations - with similar code)*/
     $('#histeq').on('click',function(){
         var file = window.opn +'.'+ window.image.format;
-        window.opn = window.opn + 1;
+        addOpnCount();
         dataParams = {
             filename    : file,
             opn         : window.opn,
@@ -150,7 +155,7 @@ $(window).on('load', function(){
     /* Log Transformation */
     $('#logtx').on('click',function(){
         var file = window.opn +'.'+ window.image.format;
-        window.opn = window.opn + 1;
+        addOpnCount();
         dataParams = {
             filename    : file,
             opn         : window.opn,
@@ -162,7 +167,7 @@ $(window).on('load', function(){
     /* Gamma Correction */
     $('#gamma_correct').on('click',function(){
         var file = window.opn +'.'+ window.image.format;
-        window.opn = window.opn + 1;
+        addOpnCount();
         var gamma = $('#gamma_correct_frame input').val();
         /* If no gain parameter is sent, default value is 1 */
         dataParams = {
@@ -177,7 +182,7 @@ $(window).on('load', function(){
     /* salt and pepper noise */
     $('#spnoise').on('click',function(){
         var file = window.opn +'.'+ window.image.format;
-        window.opn = window.opn + 1;
+        addOpnCount();
 
         /* The HTML slider can only take integer values, so this workaround is done. */
         var scale = jQuery('#spnoise_range').val();
@@ -220,6 +225,8 @@ function customSubmit(obj){
         success: function(data){
             try{
                 window.opn = 0;
+                $('#undo .text').html("Undo");
+
                 data_json = JSON.parse(data);
                 var image_name = data_json['filename'];
                 window.image.format = data_json['format'];
@@ -299,7 +306,7 @@ function showTarget(num = 1){
 
         // For next one..
         $('#targetChange').attr('show',1);  /* show recent image on next click*/
-        $('#text').html('Latest');
+        $('#targetChange #text').html('Latest');
         $('#targetChange .glyphicon').removeClass('glyphicon-eye-open').addClass('glyphicon-eye-close');
     }else{
         // showing latest
@@ -309,7 +316,7 @@ function showTarget(num = 1){
 
         // For next one..
         $('#targetChange').attr('show',0); /* Show original image on next click*/
-        $('#text').html('Original');
+        $('#targetChange #text').html('Original');
         $('#targetChange .glyphicon').removeClass('glyphicon-eye-close').addClass('glyphicon-eye-open');
     }
 }
@@ -335,4 +342,9 @@ function archiveOnServer(){
             alert(data);
         }
    });
+}
+
+function addOpnCount(){
+    window.opn += 1;
+    $('#undo .text').html("Undo"+" (" + window.opn + ")");
 }

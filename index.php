@@ -62,7 +62,7 @@
 					<!-- Undo -->
 					<div class="col-sm-6">
 						<button type="button" class="btn btn-default btn-md" id="undo">
-							<span style="transform: rotateY(180deg);" class="glyphicon glyphicon-repeat"></span> Undo
+							<span style="transform: rotateY(180deg);" class="glyphicon glyphicon-repeat"></span> <span class="text">Undo</span>
 						</button>
 					</div>
 					<!-- Reset -->
