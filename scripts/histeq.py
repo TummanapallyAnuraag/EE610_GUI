@@ -10,18 +10,19 @@ def getparam(param, def_val = ''):
     return val
 
 # My custom Histogram equalisation
+# Input image is assumed to have intensities in range 0->255
+# Return image has range 0->1
 def my_histeq(Image):
-    HeqImg = Image
+    # convert return image to type float.
+    HeqImg = Image.astype(np.float)
     (R,C) = Image.shape
-    # This is the Freq count array, type float because we want CDF to be float.
-    Freq = np.zeros((256,1),dtype='float')
+    FlatImage = Image.ravel()
+    Freq = np.bincount(FlatImage, minlength=256)
+    CDF = np.cumsum(Freq).astype(np.float)/(float(R)*float(C))
     for v in np.arange(256, dtype='int'):
-        # -0.5 -> 0.49999 => 0
-        # This is being done because, Image is float.
-        Freq[v] = np.count_nonzero( np.all([ (Image >= v-0.5), (Image < v+0.5) ], axis=0) )
-        # Max CDF values is 1
-        CDF = np.cumsum(Freq)/(R*C)
-        np.place(HeqImg, np.all([ (Image >= v-0.5), (Image < v+0.5) ], axis=0), CDF[v]*255.0)
+        indices = (Image == v)
+        HeqImg[indices] = CDF[v]
+
     return HeqImg
 
 
@@ -61,8 +62,8 @@ else:
     # This has already values from 0->255
 
 # Perform all operations here..
+Gray = Gray.astype(np.uint8)
 Gray = my_histeq(Gray)
-Gray = Gray/255.0
 
 # Just to be sure..
 np.place(Gray, Gray>1, 1)
