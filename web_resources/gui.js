@@ -114,7 +114,7 @@ $(window).on('load', function(){
             format      : window.image.format,
             sig         : sig
         }
-        performOperation(dataParams, 'blur.py');
+        performOperation(dataParams, 'blur');
     });
 
     $('#sharp').on('click',function(){
@@ -131,7 +131,7 @@ $(window).on('load', function(){
             format      : window.image.format,
             scale       : scale
         }
-        performOperation(dataParams, 'sharp.py');
+        performOperation(dataParams, 'sharp');
     });
 
     /* This will change the image being displayed. */
@@ -149,7 +149,7 @@ $(window).on('load', function(){
             opn         : window.opn,
             format      : window.image.format
         }
-        performOperation(dataParams, 'histeq.py');
+        performOperation(dataParams, 'histeq');
     });
 
     /* Log Transformation */
@@ -161,7 +161,7 @@ $(window).on('load', function(){
             opn         : window.opn,
             format      : window.image.format
         }
-        performOperation(dataParams, 'logtx.py');
+        performOperation(dataParams, 'logtx');
     });
 
     /* Gamma Correction */
@@ -176,7 +176,7 @@ $(window).on('load', function(){
             format      : window.image.format,
             gamma       : gamma
         }
-        performOperation(dataParams, 'gammacrct.py');
+        performOperation(dataParams, 'gammacrct');
     });
 
     /* salt and pepper noise */
@@ -194,7 +194,7 @@ $(window).on('load', function(){
             format      : window.image.format,
             scale       : scale
         }
-        performOperation(dataParams, 'spnoise.py');
+        performOperation(dataParams, 'spnoise');
     });
 
     /* Import some packages on load, and load in RAM so that it will reduce time to load
@@ -266,7 +266,7 @@ function showLoading(){
 sends them to some script in server, and displays the image which was returned in response. */
 function performOperation(dataParams, scriptname){
     $.ajax({
-        url: "scripts/"+scriptname,
+        url: "scripts/operation.py?opname="+scriptname,
         type: "GET",
         data: dataParams,
         beforeSend: function(){
