@@ -1,5 +1,6 @@
 /* Some variables describing the state of the GUI */
 window.opn = 0;
+window.maxopn = 0;
 window.image = {};
 window.image.format = 'jpg';
 window.image.mousedown = {};
@@ -80,6 +81,12 @@ $(window).on('load', function(){
         }else{
             $('#undo .text').html("Undo"+" (" + window.opn + ")");
         }
+        var redo_count = window.maxopn - window.opn;
+        if(redo_count > 0){
+            $('#redo .text').html("Redo"+" (" + redo_count + ")");
+        }else{
+            $('#redo .text').html("Redo");
+        }
 
         /* this date thing is being appended because,it is uniqe for each moment,
          if the same URL of image is replaced,
@@ -91,10 +98,40 @@ $(window).on('load', function(){
         showLoading();
     });
 
+    $('#redo').on('click',function(){
+        var redo_count = window.maxopn - window.opn;
+        if(redo_count > 0){
+            window.opn += 1;
+            redo_count = window.maxopn - window.opn;
+            if(window.opn <= 0){
+                window.opn = 0;
+                $('#undo .text').html("Undo");
+            }else{
+                $('#undo .text').html("Undo"+" (" + window.opn + ")");
+            }
+            if(redo_count > 0){
+                $('#redo .text').html("Redo"+" (" + redo_count + ")");
+            }else{
+                $('#redo .text').html("Redo");
+            }
+
+            /* this date thing is being appended because,it is uniqe for each moment,
+             if the same URL of image is replaced,
+             the browser will load the image from its cache, and image doesn't get updated. */
+            d = new Date();
+            var image_name = 'images/_target/' + window.opn + '.' + window.image.format;
+            $('#target').attr('src', image_name+'?'+d.getTime());
+            $('#target_slave').attr('href', image_name+'?'+d.getTime());
+            showLoading();
+        }
+    });
+
     /* Self explanatory */
     $('#reset').on('click',function(){
         window.opn = 0;
+        window.maxopn = 0;
         $('#undo .text').html("Undo");
+        $('#redo .text').html("Redo");
         d = new Date();
         var image_name = 'images/_target/' + window.opn + '.' + window.image.format;
         $('#target').attr('src', image_name+'?'+d.getTime());
@@ -362,5 +399,7 @@ function archiveOnServer(){
 
 function addOpnCount(){
     window.opn += 1;
+    window.maxopn = window.opn;
     $('#undo .text').html("Undo"+" (" + window.opn + ")");
+    $('#redo .text').html("Redo");
 }

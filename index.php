@@ -65,12 +65,18 @@
 							<span style="transform: rotateY(180deg);" class="glyphicon glyphicon-repeat"></span> <span class="text">Undo</span>
 						</button>
 					</div>
-					<!-- Reset -->
+					<!-- Redo -->
 					<div class="col-sm-6">
-						<button type="button" class="btn btn-default btn-md" id="reset">
-							<span class="glyphicon glyphicon-refresh"></span> Undo All
+						<button type="button" class="btn btn-default btn-md" id="redo">
+							<span class="glyphicon glyphicon-repeat"></span> <span class="text">Redo</span>
 						</button>
 					</div>
+				</div>
+				<!-- Reset to Original Image -->
+				<div class="control-row-single" >
+					<button type="button" class="btn btn-default btn-md" id="reset">
+						<span class="glyphicon glyphicon-refresh"></span> Undo All
+					</button>
 				</div>
 				<!-- Toggle View - Original/Recent Image -->
 				<div class="control-row-single" >
