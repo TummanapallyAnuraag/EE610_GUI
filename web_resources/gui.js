@@ -197,6 +197,22 @@ $(window).on('load', function(){
         performOperation(dataParams, 'spnoise');
     });
 
+    /* Median Filter */
+    $('#medianfilt').on('click',function(){
+        var file = window.opn +'.'+ window.image.format;
+        addOpnCount();
+
+        /* The HTML slider can only take integer values, so this workaround is done. */
+        var size = jQuery('#medianfilt_range').val();
+        dataParams = {
+            filename    : file,
+            opn         : window.opn,
+            format      : window.image.format,
+            size       : size
+        }
+        performOperation(dataParams, 'medianfilt');
+    });
+
     /* Import some packages on load, and load in RAM so that it will reduce time to load
      the packages in future.
      It was observed that around 8-10 seconds of time was being wasted to load the packages.

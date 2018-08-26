@@ -85,6 +85,30 @@ def my_histeq(Image):
     HeqImg = HeqImg.astype(np.uint8)
     return HeqImg
 
+def my_medianfiler(Img, size):
+    Ret = Img;
+    (R, C) = Img.shape
+    size = size + (size+1)%2
+    (Rf, Cf) = (size, size)
+
+    if ( (Rf %2 ==0) or (Cf %2 ==0) ):
+        print('Window size should not be even!!')
+        return Img
+
+    # Zero Padding. (Rf-1)/2 rows top and bottom
+    # Zero Padding. (Cf-1)/2 columns left and right
+    Img2 = np.append(np.zeros(((Rf-1)/2,C)), Img, axis=0)
+    Img2 = np.append(Img2,np.zeros(((Rf-1)/2,C)), axis=0)
+    Img2 = np.append(np.zeros((R+Rf-1,(Cf-1)/2)), Img2,axis=1)
+    Img2 = np.append(Img2,np.zeros((R+Rf-1,(Cf-1)/2)),axis=1)
+
+    # Basic Median operation
+    for i in np.arange( 0 + (Rf-1)/2,    R + (Rf-1)/2 ):
+        for j in np.arange(0 + (Cf-1)/2,    C + (Cf-1)/2 ):
+            Ret[i-(Rf-1)/2, j-(Cf-1)/2] = np.median(Img2[i-(Rf-1)/2:i+(Rf-1)/2+1, j-(Cf-1)/2: j+(Cf-1)/2+1])
+
+    return Ret
+
 # Output: Gray Image 0->255 uint8
 def getInputImage():
     global foldername
@@ -192,6 +216,12 @@ def spnoise(G, HSV):
     }
     return (G, Dict)
 
+def medianfilt(G, HSV):
+    size = float(getparam('size',3))
+    G = my_medianfiler(G, size)
+    Dict = {}
+    return (G, Dict)
+
 # HTML CONTENT BEGINS
 print ("Content-type:text/html\r\n\r\n")
 
@@ -202,7 +232,8 @@ OpnDictionary = {
     'gammacrct' :  gammacrct,
     'blur'      :  blur,
     'sharp'     :  sharp,
-    'spnoise'   :  spnoise
+    'spnoise'   :  spnoise,
+    'medianfilt':  medianfilt
 }
 
 # Get some parameters

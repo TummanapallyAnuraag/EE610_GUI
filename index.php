@@ -145,6 +145,15 @@
 						</button>
 					</div>
 				</div>
+				<!-- Median Filtering-->
+				<div class="control-row-single">
+					<div id="medianfilt_frame">
+						<input id="medianfilt_range" class="form-control" type="range" min="3" max="15" value="3">
+						<button type="button" class="btn btn-default btn-md" id="medianfilt">
+							Median Filter
+						</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</controls>
