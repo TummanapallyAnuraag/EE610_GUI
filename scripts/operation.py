@@ -161,7 +161,7 @@ def histeq(G, HSV):
     return (G, Dict)
 
 def logtx(G, HSV):
-    c = float(getparam('c',30))
+    c = float(getparam('c',105))
     G = G.astype(np.float)
     G = c*np.log10(G + 1)
     Dict = {}
