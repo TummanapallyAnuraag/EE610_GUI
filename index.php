@@ -85,6 +85,13 @@
 						</button>
 				</div>
 			</div>
+			<div class="control-box">
+				<div class="control-row-single" >
+						<button type="button" class="btn btn-default btn-md" id="targetChange" show="0">
+							<a target="_blank" href="images/_archive/"><span class="glyphicon glyphicon-bookmark"></span> Visit Archive </a>
+						</button>
+				</div>
+			</div>
 		</div>
 	</controls>
 
