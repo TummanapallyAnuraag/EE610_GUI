@@ -99,3 +99,38 @@ input[type=range]{
 	background-color: green;
 	box-shadow: 3px 3px 10px grey;
 }
+
+@media only screen and (max-width: 1000px) {
+
+	controls{
+		padding-top: 0px;
+	}
+
+	.col-sm-6{
+		padding: 0px 5px;
+	}
+
+	.control-box button{
+		width: 65px;
+		padding: 3px;
+		font-size: 12px;
+	}
+
+	.control-row-single button{
+		width: 140px;
+		margin-left: 5px;
+	}
+
+	input[type=range]{
+		width: 100%;
+		padding: 0px;
+		margin: 0px;
+	}
+
+	#gamma_correct_frame input{
+		width: 105% !important;
+		height: 25px;
+		font-size: 12px;
+		padding: 0px 5px;
+	}
+}
