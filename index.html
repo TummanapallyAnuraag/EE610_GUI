@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8"/>
 	<title>Basic Image Editor</title>
 	<!-- The Wheel logo displayed in the Tab Heading -->
 	<link rel='shortcut icon' type='image/x-icon' href='favicon.ico' />
@@ -12,12 +13,6 @@
 	<script src="web_resources/gui.js"></script>
 </head>
 <body>
-	<?php
-	/* On page load copy default image to working directory - _target */
-	if(copy('images/_gui/default.jpg','images/_target/0.jpg')){
-		echo '<span style="display:none;">Default Image Copied.</span>';
-	}
-	?>
 	<!-- This will be hidden by default, but visible when something is loading -->
 	<div id="body-overlay"><div><img src="images/_gui/loading.gif" width="64px" height="64px"/></div></div>
 
