@@ -87,9 +87,11 @@
 			</div>
 			<div class="control-box">
 				<div class="control-row-single" >
+					<a target="_blank" href="images/_archive/">
 						<button type="button" class="btn btn-default btn-md">
-							<a target="_blank" href="images/_archive/"><span class="glyphicon glyphicon-bookmark"></span> Visit Archive </a>
+							<span class="glyphicon glyphicon-bookmark" style="color: #4870bc;"></span> Visit Archive
 						</button>
+					</a>
 				</div>
 			</div>
 		</div>
