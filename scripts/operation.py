@@ -3,7 +3,7 @@
 # All Kinds of Imports
 import sys
 # Look for the packages here..
-sys.path.append("/var/www/html/gui/packages")
+sys.path.append(os.getcwd() + "/packages")
 
 import cgi
 from skimage import color
