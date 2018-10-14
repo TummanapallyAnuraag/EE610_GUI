@@ -3,7 +3,7 @@
 # All Kinds of Imports
 import sys
 # Look for the packages here..
-sys.path.append(os.getcwd() + "/packages")
+sys.path.append("/home/anuraag/IITB/Sem3/EE610/gui/packages")
 
 import cgi
 from skimage import color

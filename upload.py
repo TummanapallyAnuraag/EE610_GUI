@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import sys
-sys.path.append("/var/www/html/gui/packages")
+sys.path.append("/home/anuraag/IITB/Sem3/EE610/gui/packages")
 import cgi, os
 import json
 from skimage.io import imsave, imread

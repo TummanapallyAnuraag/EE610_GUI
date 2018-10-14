@@ -3,7 +3,7 @@
 import time
 t = time.time()
 import sys
-sys.path.append("/var/www/html/gui/packages")
+sys.path.append("/home/anuraag/IITB/Sem3/EE610/gui/packages")
 import cgi
 from skimage import color
 from skimage import data
