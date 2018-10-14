@@ -101,6 +101,37 @@
 	<controls style="right:0px;">
 		<div>
 			<div class="control-box">
+				<select>
+					<option> -- </option>
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+				</select>
+				<select>
+					<option> -- </option>
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+				</select>
+				<!-- Deblur - Using Inv Filter -->
+				<div class="control-row-single">
+					<button type="button" class="btn btn-default btn-md" id="deblur_inv">
+						<b>Deblur</b> (Inv. Filter)
+					</button><br>
+				</div>
+				<!-- Deblur - Using Weiner Filter -->
+				<div class="control-row-single" style="margin: 10px 0px;">
+					<div id="weiner_frame">
+						<input id="weiner_range" class="form-control" type="range" min="1" max="30" value="15">
+						<button type="button" class="btn btn-default btn-md" id="weiner">
+							<b>Deblur</b> (Weiner Filter)
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="control-box">
 				<!-- Histogram Equalisation -->
 				<div class="control-row-single">
 					<button type="button" class="btn btn-default btn-md" id="histeq">
