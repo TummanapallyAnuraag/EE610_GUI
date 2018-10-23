@@ -4,12 +4,14 @@
 import sys
 # Look for the packages here..
 sys.path.append("/home/anuraag/IITB/Sem3/EE610/gui/packages")
-
+import os
 import cgi
 from skimage import color
 from skimage.io import imsave, imread
 import numpy as np
 import json
+import cv2
+from skimage.measure import compare_ssim as ssim
 
 # This will get us the parameter from the GET/POST request from the webpage
 def getparam(param, def_val = ''):
@@ -222,6 +224,283 @@ def medianfilt(G, HSV):
     Dict = {}
     return (G, Dict)
 
+# Assignment 2 Code:
+def get_psnr(img1, img2):
+    MAX_PIXEL_VAL = 255.0
+    ERR = img1 - img2
+    MSE = np.mean( ERR**2 )
+    PSNR = 20*math.log10( MAX_PIXEL_VAL/math.sqrt(MSE) )
+    return PSNR
+
+def get_ssim(img1, img2):
+    return ssim(img1, img2, data_range=np.max(img2) - np.min(img2), multichannel=True)
+
+def deblur_inv():
+    global foldername
+    global filename
+    global format
+    global operation_num
+    Dict = {}
+
+    _I  = cv2.imread('../images/'+foldername+'/'+filename)
+    I   = cv2.cvtColor(_I, cv2.COLOR_BGR2RGB)
+    _K   = cv2.imread('../images/_kernel/0.'+kernelformat,0)
+    _K   = _K.astype(np.float)
+    _K   = _K/np.sum(_K)
+
+    r = I[:,:,0]
+    g = I[:,:,1]
+    b = I[:,:,2]
+
+    (kr,kc) = _K.shape
+    (M,N)   = r.shape
+
+    K = np.zeros([M,N])
+    # K[M/2 - kr/2 :M/2 + kr/2, N/2 - kc/2 : N/2 + kc/2 ]  = _K
+    K[:kr, :kc] = _K
+
+    RFFT = np.fft.fft2(r)
+    GFFT = np.fft.fft2(g)
+    BFFT = np.fft.fft2(b)
+    KFFT = np.fft.fft2(K)
+
+    # Why fft shift?
+    # why take real?
+    deblur_r = np.real( np.fft.ifft2(RFFT/KFFT) )
+    deblur_g = np.real( np.fft.ifft2(GFFT/KFFT) )
+    deblur_b = np.real( np.fft.ifft2(BFFT/KFFT) )
+
+    deblur = np.zeros([M,N,3])
+    deblur[:,:,0] = deblur_b
+    deblur[:,:,1] = deblur_g
+    deblur[:,:,2] = deblur_r
+    # plt.imshow(20*np.log(np.abs(RFFT)), cmap='gray')
+    # plt.show()
+    # deblur = np.roll(deblur, kr/2, axis=0)
+    # deblur = np.roll(deblur, kc/2, axis=1)
+    cv2.imwrite('../images/'+foldername+'/'+operation_num+'.'+format, deblur)
+    return Dict
+
+def deblur_trunc():
+    global foldername
+    global filename
+    global format
+    global operation_num
+    radius = float(getparam('radius', 150))
+    Dict = {}
+    # _gt = cv2.imread('../images/'+foldername+'/'+filename)
+    # gt = cv2.cvtColor(_gt, cv2.COLOR_BGR2RGB)
+    _I  = cv2.imread('../images/'+foldername+'/'+filename)
+    I   = cv2.cvtColor(_I, cv2.COLOR_BGR2RGB)
+    _K   = cv2.imread('../images/_kernel/0.'+kernelformat,0)
+    _K   = _K.astype(np.float)
+    _K   = _K/np.sum(_K)
+
+    r = I[:,:,0]
+    g = I[:,:,1]
+    b = I[:,:,2]
+
+    (kr,kc) = _K.shape
+    (M,N)   = r.shape
+
+    K           = np.zeros([M,N])
+    # K[M/2 - kr/2 :M/2 + kr/2, N/2 - kc/2 : N/2 + kc/2 ]  = _K
+    K[:kr,:kc] = _K
+
+    exists = os.path.isfile('../images/_trash/TRUNC_'+str(M)+'_'+str(N)+'_'+str(radius)+'.png')
+    if(exists):
+        print('\tLeveraging existing TRUNC')
+        TRUNC = cv2.imread('../images/_trash/TRUNC_'+str(M)+'_'+str(N)+'_'+str(radius)+'.png', 0)
+        TRUNC = TRUNC.astype(np.float)
+    else:
+        TRUNC = np.zeros([M,N])
+        TRUNC = TRUNC.astype(np.float)
+        for row in np.arange(0,M):
+            for col in np.arange(0,N):
+                # print(radius,row)
+                # exit()
+                if( (row-radius)*(row-(M-radius)) < 0 ):
+                    continue
+
+                if( (col-radius)*(col-(N-radius)) < 0 ):
+                    continue
+
+                d1 = np.linalg.norm( np.array([row, col]) )
+                d2 = np.linalg.norm( np.array([row-M, col]) )
+                d3 = np.linalg.norm( np.array([row, col-N]) )
+                d4 = np.linalg.norm( np.array([row-M, col-N]) )
+                d = np.min([d1,d2,d3,d4])
+                if(d < radius):
+                    # TRUNC[row,col] = 1.0/(1.0 + (d/radius)**(2*10) )
+                    TRUNC[row,col] = 1.0
+
+        cv2.imwrite('../data/trunc/TRUNC_'+str(M)+'_'+str(N)+'_'+str(radius)+'.png', TRUNC)
+
+    RFFT = np.fft.fft2(r)
+    GFFT = np.fft.fft2(g)
+    BFFT = np.fft.fft2(b)
+    KFFT = np.fft.fft2(K)
+
+    # Why fft shift?
+    # why take real?
+
+    deblur_r = np.real( np.fft.ifft2(RFFT*TRUNC/KFFT) )
+    deblur_g = np.real( np.fft.ifft2(GFFT*TRUNC/KFFT) )
+    deblur_b = np.real( np.fft.ifft2(BFFT*TRUNC/KFFT) )
+
+    deblur = np.zeros([M,N,3])
+    deblur[:,:,0] = deblur_b
+    deblur[:,:,1] = deblur_g
+    deblur[:,:,2] = deblur_r
+    # plt.imshow(TRUNC)
+    # plt.show()
+    # exit()
+    cv2.imwrite('../images/'+foldername+'/'+operation_num+'.'+format, deblur)
+    return Dict
+
+def deblur_weiner():
+    global foldername
+    global filename
+    global format
+    global operation_num
+
+    Dict = {}
+    _I = cv2.imread('../images/'+foldername+'/'+filename)
+    I = cv2.cvtColor(_I, cv2.COLOR_BGR2RGB)
+
+    _kernel =  cv2.imread('../images/_kernel/0.'+kernelformat,0)
+    _kernel = _kernel.astype(np.float)
+    _kernel = _kernel/np.sum(_kernel)
+
+    K_weiner = float(getparam('k',0))
+    (M, N) = I[:,:,0].shape
+    (kr, kc) = _kernel.shape
+
+    K = np.zeros([M,N])
+    # K[ M/2 - kr/2 : M/2 + kr/2, N/2 - kc/2 : N/2 + kc/2 ] = _kernel
+    K[:kr,:kc] = _kernel
+
+    r = I[:,:,0]
+    g = I[:,:,1]
+    b = I[:,:,2]
+
+    RFFT = np.fft.fft2(r)
+    GFFT = np.fft.fft2(g)
+    BFFT = np.fft.fft2(b)
+    KFFT = np.fft.fft2(K)
+
+    # Why fft shift?
+    # why take real?
+    deblur_r = np.real( np.fft.ifft2(RFFT*np.abs(KFFT)**2/(KFFT*(K_weiner + np.abs(KFFT)**2 ) ) ) )
+    deblur_g = np.real( np.fft.ifft2(GFFT*np.abs(KFFT)**2/(KFFT*(K_weiner + np.abs(KFFT)**2 ) ) ) )
+    deblur_b = np.real( np.fft.ifft2(BFFT*np.abs(KFFT)**2/(KFFT*(K_weiner + np.abs(KFFT)**2 ) ) ) )
+
+    deblur = np.zeros([M,N,3])
+    deblur[:,:,0] = deblur_b
+    deblur[:,:,1] = deblur_g
+    deblur[:,:,2] = deblur_r
+    # plt.imshow(deblur_r, cmap='gray')
+    # plt.show()
+    cv2.imwrite('../images/'+foldername+'/'+operation_num+'.'+format, deblur)
+    return Dict
+
+def deblur_cls():
+    global foldername
+    global filename
+    global format
+    global operation_num
+
+    Dict = {}
+    gamma = float(getparam('cls_gamma',0))
+
+    _I = cv2.imread('../images/'+foldername+'/'+filename)
+    I = cv2.cvtColor(_I, cv2.COLOR_BGR2RGB)
+
+    _kernel =  cv2.imread('../images/_kernel/0.'+kernelformat,0)
+    _kernel = _kernel.astype(np.float)
+    _kernel = _kernel/np.sum(_kernel)
+
+    (M, N) = I[:,:,0].shape
+    (kr, kc) = _kernel.shape
+
+    K = np.zeros([M,N])
+    # no problem only for even kr
+    K[ M/2 - kr/2 : M/2 + kr/2, N/2 - kc/2 : N/2 + kc/2 ] = _kernel
+
+    P = np.zeros([M,N])
+    P[M/2 -1: M/2 + 2 , N/2 - 1 : N/2 + 2] = np.array([
+    [0, -1, 0],
+    [-1, 4, -1],
+    [0, -1, 0]
+    ])
+
+    r = I[:,:,0]
+    g = I[:,:,1]
+    b = I[:,:,2]
+
+    RFFT = np.fft.fftshift(np.fft.fft2(r))
+    GFFT = np.fft.fftshift(np.fft.fft2(g))
+    BFFT = np.fft.fftshift(np.fft.fft2(b))
+    KFFT = np.fft.fftshift(np.fft.fft2(K))
+    PFFT = np.fft.fftshift(np.fft.fft2(P))
+
+    # Why fft shift?
+    # why take real?
+    deblur_r = np.real( np.fft.ifftshift( np.fft.ifft2(RFFT*np.conj(KFFT)/( gamma*np.abs(PFFT)**2 + np.abs(KFFT)**2 ) ) ) )
+    deblur_g = np.real( np.fft.ifftshift( np.fft.ifft2(GFFT*np.conj(KFFT)/( gamma*np.abs(PFFT)**2 + np.abs(KFFT)**2 ) ) ) )
+    deblur_b = np.real( np.fft.ifftshift( np.fft.ifft2(BFFT*np.conj(KFFT)/( gamma*np.abs(PFFT)**2 + np.abs(KFFT)**2 ) ) ) )
+
+    deblur = np.zeros([M,N,3])
+    deblur[:,:,0] = deblur_b
+    deblur[:,:,1] = deblur_g
+    deblur[:,:,2] = deblur_r
+    # plt.imshow(P, cmap='gray')
+    # plt.show()
+    cv2.imwrite('../images/'+foldername+'/'+operation_num+'.'+format, deblur)
+    return Dict
+
+
+def blur_image():
+    Dict = {}
+    sigma = float(getparam('sigma', 0.0))
+    # print(sigma)
+    # sigma = 10.0
+    _I = cv2.imread('../images/'+foldername+'/'+filename)
+    (b,g,r) = cv2.split(_I)
+    _K   = cv2.imread('../images/_kernel/0.'+kernelformat,0)
+    _K   = _K.astype(np.float)
+    _K   = _K/np.sum(_K)
+
+    (kr,kc) = _K.shape
+    (M,N)   = r.shape
+
+    K = np.zeros([M,N])
+    K[:kr,:kc] = _K
+
+    RFFT = np.fft.fft2(r)
+    GFFT = np.fft.fft2(g)
+    BFFT = np.fft.fft2(b)
+    KFFT = np.fft.fft2(K)
+
+    blur_r = np.real( np.fft.ifft2(RFFT*KFFT) )
+    blur_g = np.real( np.fft.ifft2(GFFT*KFFT) )
+    blur_b = np.real( np.fft.ifft2(BFFT*KFFT) )
+
+    blur = np.zeros([M,N,3])
+    if(sigma > 0):
+        blur[:,:,0] = blur_b + np.random.normal(0, sigma, (M,N))
+        blur[:,:,1] = blur_g + np.random.normal(0, sigma, (M,N))
+        blur[:,:,2] = blur_r + np.random.normal(0, sigma, (M,N))
+    else:
+        blur[:,:,0] = blur_b
+        blur[:,:,1] = blur_g
+        blur[:,:,2] = blur_r
+    # plt.imshow(blur, cmap='gray')
+    # plt.show()
+    cv2.imwrite('../images/'+foldername+'/'+operation_num+'.'+format, blur)
+    return Dict
+
+
 # HTML CONTENT BEGINS
 print ("Content-type:text/html\r\n\r\n")
 
@@ -233,7 +512,14 @@ OpnDictionary = {
     'blur'      :  blur,
     'sharp'     :  sharp,
     'spnoise'   :  spnoise,
-    'medianfilt':  medianfilt
+    'medianfilt':  medianfilt,
+}
+
+deblurDictionary = {
+    'deblur_inv'    : deblur_inv,
+    'deblur_trunc'  : deblur_trunc,
+    'deblur_weiner' : deblur_weiner,
+    'blur_image'    : blur_image
 }
 
 # Get some parameters
@@ -243,11 +529,15 @@ operation_num   = getparam('opn','1')
 format          = getparam('format','jpg')
 RGB             = 1
 operation_name  = getparam('opname', 'histeq')
+kernelformat    = getparam('kernelformat', 'jpg')
 
 # LOGIC
-(G, HSV) = getInputImage()
-(G, Dict) = OpnDictionary[operation_name](G, HSV)
-saveOutputImage(G, HSV)
+if operation_name in OpnDictionary:
+    (G, HSV) = getInputImage()
+    (G, Dict) = OpnDictionary[operation_name](G, HSV)
+    saveOutputImage(G, HSV)
+else:
+    (Dict) = deblurDictionary[operation_name]()
 
 # Return Message
 Dict['filename'] = 'images/_target/' + operation_num + '.' + format

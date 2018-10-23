@@ -120,6 +120,18 @@
 	<controls style="right:0px;">
 		<div>
 			<div class="control-box">
+				<div class="control-row" style="margin: 10px 0px;">
+					<div id="degrade_frame">
+						<div class="col-sm-4">
+						<input placeholder="sigma" value="" name="sigma" class="form-control" style="width:120%;">
+						</div>
+						<div class="col-sm-8">
+						<button type="button" class="btn btn-default btn-md" id="degrade" style="width:100%;">
+							<b>Degrade</b>
+						</button>
+						</div>
+					</div>
+				</div>
 				<!-- Deblur - Using Inv Filter -->
 				<div class="control-row-single">
 					<button type="button" class="btn btn-default btn-md" id="deblur_inv">
@@ -129,29 +141,49 @@
 				<!-- Deblur - Using Truncated Inverse Filter -->
 				<div class="control-row-single" style="margin: 10px 0px;">
 					<div id="trunc_frame">
-						<input id="trunc_range" class="form-control" type="range" min="1" max="30" value="15">
+						<input id="trunc_range" class="form-control" type="range" min="1" max="400" value="150">
 						<button type="button" class="btn btn-default btn-md" id="trunc">
 							<b>Deblur</b> (Trunc. Inv. Filter)
 						</button>
 					</div>
 				</div>
 				<!-- Deblur - Using Weiner Filter -->
-				<div class="control-row-single" style="margin: 10px 0px;">
+				<div class="control-row" style="margin: 10px 0px;">
 					<div id="weiner_frame">
+						<div class="col-sm-4">
+							<input placeholder="K" value="" name="k" class="form-control" style="width:120%;">
+						</div>
+						<div class="col-sm-8">
+						<button type="button" class="btn btn-default btn-md" id="weiner" style="width:100%;">
+							<b>Deblur</b> (Weiner Filt.)
+						</button>
+						</div>
+					</div>
+					<!-- <div id="weiner_frame">
 						<input id="weiner_range" class="form-control" type="range" min="1" max="30" value="15">
 						<button type="button" class="btn btn-default btn-md" id="weiner">
 							<b>Deblur</b> (Weiner Filter)
 						</button>
-					</div>
+					</div> -->
 				</div>
 				<!-- Deblur - Using Constrained Least Square Filtering -->
-				<div class="control-row-single" style="margin: 10px 0px;">
+				<div class="control-row" style="margin: 10px 0px;">
 					<div id="clsfilter_frame">
+						<div class="col-sm-4">
+						<input placeholder="gamma" value="" name="cls_gamma" class="form-control" style="width:120%;">
+						</div>
+						<div class="col-sm-8">
+						<button type="button" class="btn btn-default btn-md" id="clsfilter" style="width:100%;">
+							<b>Deblur</b> (CLS Filt.)
+						</button>
+						</div>
+					</div>
+					<!-- <div id="clsfilter_frame">
 						<input id="clsfilter_range" class="form-control" type="range" min="1" max="30" value="15">
 						<button type="button" class="btn btn-default btn-md" id="clsfilter">
 							<b>Deblur</b> (CLS Filter)
 						</button>
-					</div>
+					</div> -->
 				</div>
 			</div>
 			<div class="control-box">

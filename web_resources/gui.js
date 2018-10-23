@@ -258,6 +258,98 @@ $(window).on('load', function(){
         performOperation(dataParams, 'medianfilt');
     });
 
+    $('#degrade').on('click',function(){
+        if(window.kernel.flag == 0){
+            alert("Please Upload a Kernel");
+            return;
+        }
+        var file = window.opn +'.'+ window.image.format;
+        addOpnCount();
+        var sigma = $('#degrade_frame input').val();
+        /* If no gain parameter is sent, default value is 1 */
+        dataParams = {
+            filename    : file,
+            opn         : window.opn,
+            format      : window.image.format,
+            sigma       : sigma,
+            kernelformat: window.kernel.format
+        }
+        performOperation(dataParams, 'blur_image');
+    });
+
+    $('#deblur_inv').on('click',function(){
+        if(window.kernel.flag == 0){
+            alert("Please Upload a Kernel");
+            return;
+        }
+        var file = window.opn +'.'+ window.image.format;
+        addOpnCount();
+        dataParams = {
+            filename    : file,
+            opn         : window.opn,
+            format      : window.image.format,
+            kernelformat: window.kernel.format
+        }
+        performOperation(dataParams, 'deblur_inv');
+    });
+
+    $('#trunc').on('click',function(){
+        if(window.kernel.flag == 0){
+            alert("Please Upload a Kernel");
+            return;
+        }
+        var file = window.opn +'.'+ window.image.format;
+        addOpnCount();
+        /* The HTML slider can only take integer values, so this workaround is done. */
+        var radius = jQuery('#trunc_range').val();
+        dataParams = {
+            filename    : file,
+            opn         : window.opn,
+            format      : window.image.format,
+            radius       : radius,
+            kernelformat: window.kernel.format
+        }
+        performOperation(dataParams, 'deblur_trunc');
+    });
+
+    $('#weiner').on('click',function(){
+        if(window.kernel.flag == 0){
+            alert("Please Upload a Kernel");
+            return;
+        }
+        var file = window.opn +'.'+ window.image.format;
+        addOpnCount();
+        var k = $('#weiner_frame input').val();
+        /* If no gain parameter is sent, default value is 1 */
+        dataParams = {
+            filename    : file,
+            opn         : window.opn,
+            format      : window.image.format,
+            k           : k,
+            kernelformat: window.kernel.format
+        }
+        performOperation(dataParams, 'deblur_weiner');
+    });
+
+    $('#clsfilter').on('click',function(){
+        if(window.kernel.flag == 0){
+            alert("Please Upload a Kernel");
+            return;
+        }
+        var file = window.opn +'.'+ window.image.format;
+        addOpnCount();
+        var gamma = $('#clsfilter_frame input').val();
+        /* If no gain parameter is sent, default value is 1 */
+        dataParams = {
+            filename    : file,
+            opn         : window.opn,
+            format      : window.image.format,
+            gamma       : gamma,
+            kernelformat: window.kernel.format
+        }
+        performOperation(dataParams, 'deblur_weiner');
+    });
+
     /* Import some packages on load, and load in RAM so that it will reduce time to load
      the packages in future.
      It was observed that around 8-10 seconds of time was being wasted to load the packages.
@@ -325,10 +417,12 @@ function customSubmitKernel(obj){
         processData:false,
         success: function(data){
             try{
+                window.kernel.flag = 1;
                 data_json = JSON.parse(data);
                 var image_name = data_json['filename'];
                 if(image_name.length < 1){
                     image_name = 'images/_gui/broken.png';
+                    window.kernel.flag = 0;
                     alert("There was some error while Uploading the Image !");
                 }
                 d = new Date();
@@ -338,6 +432,7 @@ function customSubmitKernel(obj){
                 }
             }catch(error){
                 hideLoading();
+                window.kernel.flag = 0;
                 console.error(error);
                 alert('Some ERROR occured !');
             }
