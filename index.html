@@ -26,6 +26,7 @@
 						<button type="button" class="btn btn-default btn-md" id="upload_button">
 							<span class="glyphicon glyphicon-upload"></span> Upload
 						</button>
+						<input name="flag" value="image" type="hidden">
 						<input id="upload_input" type="file" onchange="customSubmit(this.form)" name="pic" accept="image/*" style="display:none;">
 						<!-- <input type="submit" name="submit" value="submit"> -->
 					</form>
@@ -89,6 +90,24 @@
 					</a>
 				</div>
 			</div>
+			<div class="control-box">
+				<div class="control-row-single" >
+					<form id="kernel_form" method="POST" action="upload.py" enctype="multipart/form-data">
+						<button type="button" class="btn btn-default btn-md" id="upload_kernel_button">
+							<span class="glyphicon glyphicon-upload"></span> Upload Kernel
+						</button>
+						<input name="flag" value="kernel" type="hidden">
+						<input id="upload_kernel_input" type="file" onchange="customSubmitKernel(this.form)" name="pic" accept="image/*" style="display:none;">
+						<!-- <input type="submit" name="submit" value="submit"> -->
+					</form>
+				</div>
+			</div>
+			<div class="control-box">
+				<div style="color:white;text-align:center;"><b>KERNEL:<b></div>
+				<div id="kernel-div">
+					<img id="kernel" src="images/_gui/broken.png" onload="hideLoading();">
+				</div>
+			</div>
 		</div>
 	</controls>
 
@@ -101,25 +120,20 @@
 	<controls style="right:0px;">
 		<div>
 			<div class="control-box">
-				<select>
-					<option> -- </option>
-					<option>1</option>
-					<option>2</option>
-					<option>3</option>
-					<option>4</option>
-				</select>
-				<select>
-					<option> -- </option>
-					<option>1</option>
-					<option>2</option>
-					<option>3</option>
-					<option>4</option>
-				</select>
 				<!-- Deblur - Using Inv Filter -->
 				<div class="control-row-single">
 					<button type="button" class="btn btn-default btn-md" id="deblur_inv">
 						<b>Deblur</b> (Inv. Filter)
 					</button><br>
+				</div>
+				<!-- Deblur - Using Truncated Inverse Filter -->
+				<div class="control-row-single" style="margin: 10px 0px;">
+					<div id="trunc_frame">
+						<input id="trunc_range" class="form-control" type="range" min="1" max="30" value="15">
+						<button type="button" class="btn btn-default btn-md" id="trunc">
+							<b>Deblur</b> (Trunc. Inv. Filter)
+						</button>
+					</div>
 				</div>
 				<!-- Deblur - Using Weiner Filter -->
 				<div class="control-row-single" style="margin: 10px 0px;">
@@ -127,6 +141,15 @@
 						<input id="weiner_range" class="form-control" type="range" min="1" max="30" value="15">
 						<button type="button" class="btn btn-default btn-md" id="weiner">
 							<b>Deblur</b> (Weiner Filter)
+						</button>
+					</div>
+				</div>
+				<!-- Deblur - Using Constrained Least Square Filtering -->
+				<div class="control-row-single" style="margin: 10px 0px;">
+					<div id="clsfilter_frame">
+						<input id="clsfilter_range" class="form-control" type="range" min="1" max="30" value="15">
+						<button type="button" class="btn btn-default btn-md" id="clsfilter">
+							<b>Deblur</b> (CLS Filter)
 						</button>
 					</div>
 				</div>

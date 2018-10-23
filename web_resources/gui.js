@@ -4,6 +4,9 @@ window.maxopn = 0;
 window.image = {};
 window.image.format = 'jpg';
 window.image.mousedown = {};
+window.kernel = {}
+window.kernel.flag = 0;
+window.kernel.format = 'png';
 
 /* Some onclick functions */
 $(window).on('load', function(){
@@ -48,6 +51,11 @@ $(window).on('load', function(){
     /* Trigger click of input tag when button tag is clicked  */
     $('#upload_button').bind("click" , function () {
         $('#upload_input').click();
+    });
+
+    /* Trigger click of input tag when button tag is clicked  */
+    $('#upload_kernel_button').bind("click" , function () {
+        $('#upload_kernel_input').click();
     });
 
     /* Increase the size of image in plank when zoom in button is clicked*/
@@ -298,12 +306,45 @@ function customSubmit(obj){
                 //     $("#body-overlay").hide();
                 // },500);
             }catch(error){
+                hideLoading();
                 console.error(error);
                 alert('Some ERROR occured !');
             }
         }
    });
 }
+
+function customSubmitKernel(obj){
+    /* This function will send a AJAX request to upload file - which saves the uploaded file */
+    $.ajax({
+        url: "upload.py",
+        type: "POST",
+        data:  new FormData(obj),
+        beforeSend: function(){$("#body-overlay").show();},
+        contentType: false,
+        processData:false,
+        success: function(data){
+            try{
+                data_json = JSON.parse(data);
+                var image_name = data_json['filename'];
+                if(image_name.length < 1){
+                    image_name = 'images/_gui/broken.png';
+                    alert("There was some error while Uploading the Image !");
+                }
+                d = new Date();
+                $('#kernel').attr('src', image_name+'?'+d.getTime());
+                if(data_json['message'].length > 0){
+                    alert(data_json['message']);
+                }
+            }catch(error){
+                hideLoading();
+                console.error(error);
+                alert('Some ERROR occured !');
+            }
+        }
+   });
+}
+
 
 /* A small function to stop showing the loading image*/
 function hideLoading(){

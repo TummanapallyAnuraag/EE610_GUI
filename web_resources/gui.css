@@ -100,6 +100,17 @@ input[type=range]{
 	box-shadow: 3px 3px 10px grey;
 }
 
+#kernel{
+	max-width: 100px;
+	max-height: 100px;
+	display: block;
+	margin: auto;
+}
+
+#kernel-div{
+	background-color: grey;
+	padding: 1em;
+}
 @media only screen and (max-width: 1000px) {
 
 	controls{
